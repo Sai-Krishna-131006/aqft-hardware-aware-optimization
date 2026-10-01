@@ -112,5 +112,95 @@ for n in qubit_sizes:
 
     plt.close()
 
+# --------------------------------------------------
+# Combined comparison plot
+# --------------------------------------------------
 
-print("Version 1 vs Version 2 comparison plots generated.")
+plt.figure(figsize=(10, 7))
+
+markers_degree = {
+    3: "o",
+    4: "s",
+    5: "^",
+    6: "D",
+    8: "x"
+}
+
+markers_threshold = {
+    3: "o",
+    4: "s",
+    5: "^",
+    6: "D",
+    8: "x"
+}
+
+for n in qubit_sizes:
+
+    degree_rows = [
+        row for row in degree_data
+        if row["qubits"] == n
+    ]
+
+    threshold_rows = [
+        row for row in threshold_data
+        if row["qubits"] == n
+    ]
+
+    # Degree-based AQFT
+    degree_error = [
+        row["error"] for row in degree_rows
+    ]
+
+    degree_two_qubit = [
+        row["two_qubit_gates"] for row in degree_rows
+    ]
+
+    plt.plot(
+        degree_error,
+        degree_two_qubit,
+        marker=markers_degree[n],
+        linestyle="-",
+        label=f"{n}q Degree"
+    )
+
+    # Threshold-based AQFT
+    threshold_error = [
+        row["error"] for row in threshold_rows
+    ]
+
+    threshold_two_qubit = [
+        row["two_qubit_gates"] for row in threshold_rows
+    ]
+
+    plt.plot(
+        threshold_error,
+        threshold_two_qubit,
+        marker=markers_threshold[n],
+        linestyle="--",
+        label=f"{n}q Threshold"
+    )
+
+
+plt.xlabel("Approximation error")
+plt.ylabel("Two-qubit gates")
+
+plt.title(
+    "Degree-based vs Threshold-based AQFT Across Qubit Sizes"
+)
+
+plt.legend(
+    ncol=2,
+    fontsize=9
+)
+
+plt.grid(True)
+
+plt.savefig(
+    plots_dir / "combined_aqft_comparison.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.close()
+
+print("Combined AQFT comparison plot generated.")
