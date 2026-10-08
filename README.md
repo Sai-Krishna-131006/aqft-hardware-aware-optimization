@@ -749,19 +749,18 @@ $$
 E_{\max}\in\{0.01,\;0.05,\;0.10,\;0.20\}
 $$
 
-### Physical 2Q Reduction
+### Physical Two-Qubit Gate Reduction
 
 The physical two-qubit gate reduction is calculated as:
 
 $$
-\mathrm{Reduction}
-=
+\mathrm{Reduction} =
 \frac{
 N_{2Q}^{threshold} - N_{2Q}^{degree}
 }{
 N_{2Q}^{threshold}
 }
-\times 100\%
+\times 100
 $$
 
 where:
