@@ -4,7 +4,7 @@
 
 This project studies the optimization of the **Quantum Fourier Transform (QFT)** using **Approximate Quantum Fourier Transform (AQFT)** techniques under hardware connectivity constraints.
 
-The exact QFT contains controlled-phase rotations with progressively smaller rotation angles. AQFT reduces circuit resources by removing selected small-angle controlled-phase rotations, introducing an approximation error in exchange for lower circuit cost.
+The exact QFT contains controlled-phase rotations with progressively smaller rotation angles. AQFT reduces circuit resources by removing selected small-angle controlled-phase rotations, introducing approximation error in exchange for lower circuit cost.
 
 The main research question is:
 
@@ -26,27 +26,23 @@ The circuits are transpiled to a **linear nearest-neighbor (LNN)** architecture 
 
 The main optimization problem is formulated as:
 
-\[
-\boxed{
+$$
 \min C_{\text{hardware}}
 \quad \text{subject to} \quad
 E_{\text{approx}} \leq E_{\max}
-}
-\]
+$$
 
 where:
 
-- \(C_{\text{hardware}}\) = hardware-level circuit cost
-- \(E_{\text{approx}}\) = approximation error introduced by AQFT
-- \(E_{\max}\) = maximum acceptable approximation error
+- $C_{\text{hardware}}$ = hardware-level circuit cost
+- $E_{\text{approx}}$ = approximation error introduced by AQFT
+- $E_{\max}$ = maximum acceptable approximation error
 
 The primary hardware cost used in this work is the number of physical two-qubit gates after transpilation:
 
-\[
-\boxed{
+$$
 C_{\text{hardware}} = N_{2Q}^{\text{physical}}
-}
-\]
+$$
 
 SWAP count and circuit depth are used as secondary hardware metrics.
 
@@ -60,20 +56,20 @@ The optimization therefore prioritizes:
 
 # QFT Construction
 
-For an \(n\)-qubit system, the QFT transformation is:
+For an $n$-qubit system, the QFT transformation is:
 
-\[
+$$
 QFT|x\rangle =
 \frac{1}{\sqrt{N}}
 \sum_{y=0}^{N-1}
 e^{2\pi ixy/N}|y\rangle
-\]
+$$
 
 where:
 
-\[
+$$
 N = 2^n
-\]
+$$
 
 The QFT circuit consists mainly of:
 
@@ -82,7 +78,7 @@ The QFT circuit consists mainly of:
 
 The controlled-phase gate is represented by:
 
-\[
+$$
 CP(\theta)=
 \begin{bmatrix}
 1&0&0&0\\
@@ -90,17 +86,17 @@ CP(\theta)=
 0&0&1&0\\
 0&0&0&e^{i\theta}
 \end{bmatrix}
-\]
+$$
 
 The QFT contains progressively smaller rotation angles:
 
-\[
+$$
 \frac{\pi}{2},
 \frac{\pi}{4},
 \frac{\pi}{8},
 \frac{\pi}{16},
 \dots
-\]
+$$
 
 These small-angle rotations are the main candidates for AQFT approximation.
 
@@ -116,9 +112,9 @@ Two circuits were considered equivalent when their unitaries were equivalent up 
 
 The exact QFT implementation was validated for:
 
-\[
+$$
 n \in \{3,4,5,6,8\}
-\]
+$$
 
 qubits.
 
@@ -130,13 +126,11 @@ AQFT reduces the QFT circuit by removing selected controlled-phase rotations.
 
 The fundamental trade-off is:
 
-\[
-\boxed{
+$$
 \text{Lower circuit cost}
 \quad\Longleftrightarrow\quad
 \text{Higher approximation error}
-}
-\]
+$$
 
 Therefore, the objective is not simply to remove as many gates as possible.
 
@@ -148,28 +142,27 @@ Instead, the experiment searches for the lowest hardware cost while satisfying a
 
 Let:
 
-\[
+$$
 U_{\text{exact}}
-\]
+$$
 
 represent the exact QFT unitary and:
 
-\[
+$$
 U_{\text{AQFT}}
-\]
+$$
 
 represent the approximate QFT unitary.
 
-For an \(n\)-qubit system:
+For an $n$-qubit system:
 
-\[
+$$
 d = 2^n
-\]
+$$
 
 The unitary fidelity is calculated as:
 
-\[
-\boxed{
+$$
 F_U =
 \frac{
 \left|
@@ -181,21 +174,18 @@ U_{\text{exact}}^\dagger U_{\text{AQFT}}
 }{
 d^2
 }
-}
-\]
+$$
 
 The approximation error is then:
 
-\[
-\boxed{
+$$
 E_{\text{approx}} = 1-F_U
-}
-\]
+$$
 
 Therefore:
 
-- \(E_{\text{approx}}=0\) means no approximation error.
-- Larger \(E_{\text{approx}}\) means greater deviation from the exact QFT.
+- $E_{\text{approx}}=0$ means no approximation error.
+- Larger $E_{\text{approx}}$ means greater deviation from the exact QFT.
 
 ---
 
@@ -203,12 +193,9 @@ Therefore:
 
 Four approximation-error budgets were used throughout the hardware-aware optimization experiment:
 
-\[
-\boxed{
-E_{\max}\in
-\{0.01,\;0.05,\;0.10,\;0.20\}
-}
-\]
+$$
+E_{\max}\in\{0.01,\;0.05,\;0.10,\;0.20\}
+$$
 
 These represent increasingly relaxed approximation constraints.
 
@@ -221,11 +208,9 @@ These represent increasingly relaxed approximation constraints.
 
 For every qubit size and every error budget, only AQFT configurations satisfying:
 
-\[
-\boxed{
+$$
 E_{\text{approx}}\leq E_{\max}
-}
-\]
+$$
 
 are considered valid.
 
@@ -268,17 +253,15 @@ The threshold-based approach removes controlled-phase rotations according to the
 
 A controlled-phase gate is removed when:
 
-\[
-\boxed{
+$$
 \theta \leq \theta_{\text{threshold}}
-}
-\]
+$$
 
 and retained when:
 
-\[
+$$
 \theta > \theta_{\text{threshold}}
-\]
+$$
 
 Thus, the threshold determines how aggressively small-angle rotations are removed.
 
@@ -304,13 +287,11 @@ If a logical circuit requires an interaction between non-adjacent qubits, the tr
 
 Therefore:
 
-\[
-\boxed{
+$$
 \text{Logical gate reduction}
 \neq
 \text{Physical gate reduction}
-}
-\]
+$$
 
 This distinction is central to the experiment.
 
@@ -338,95 +319,91 @@ The same transpilation configuration is used for the compared AQFT methods to ma
 
 For each qubit size:
 
-\[
+$$
 n\in\{3,4,5,6,8\}
-\]
+$$
 
 and each error budget:
 
-\[
+$$
 E_{\max}\in\{0.01,0.05,0.10,0.20\}
-\]
+$$
 
 the following procedure is performed.
 
-### Step 1 — Generate exact QFT
+### Step 1 — Generate Exact QFT
 
 Construct the exact QFT circuit.
 
-### Step 2 — Generate AQFT configurations
+### Step 2 — Generate AQFT Configurations
 
 Generate AQFT circuits using:
 
 - Degree-based approximation
 - Threshold-based approximation
 
-### Step 3 — Calculate approximation error
+### Step 3 — Calculate Approximation Error
 
 For every AQFT configuration:
 
-\[
+$$
 E_{\text{approx}} = 1-F_U
-\]
+$$
 
-### Step 4 — Transpile to LNN hardware
+### Step 4 — Transpile to LNN Hardware
 
 Each circuit is transpiled to the same linear connectivity architecture.
 
-### Step 5 — Measure hardware cost
+### Step 5 — Measure Hardware Cost
 
 The following are recorded:
 
-\[
+$$
 N_{2Q}^{\text{physical}}
-\]
+$$
 
-\[
+$$
 N_{\text{SWAP}}
-\]
+$$
 
-\[
+$$
 D_{\text{physical}}
-\]
+$$
 
 where:
 
-- \(N_{2Q}^{\text{physical}}\) = physical two-qubit gates
-- \(N_{\text{SWAP}}\) = SWAP gates
-- \(D_{\text{physical}}\) = transpiled circuit depth
+- $N_{2Q}^{\text{physical}}$ = physical two-qubit gates
+- $N_{\text{SWAP}}$ = SWAP gates
+- $D_{\text{physical}}$ = transpiled circuit depth
 
-### Step 6 — Apply error constraint
+### Step 6 — Apply Error Constraint
 
 Only configurations satisfying:
 
-\[
+$$
 E_{\text{approx}}\leq E_{\max}
-\]
+$$
 
 are retained.
 
-### Step 7 — Select the hardware-efficient configuration
+### Step 7 — Select the Hardware-Efficient Configuration
 
 The valid configuration with the minimum physical two-qubit gate count is selected.
 
 The optimization can therefore be written as:
 
-\[
-\boxed{
+$$
 \min_{c\in C}
 N_{2Q}^{\text{physical}}(c)
-}
-\]
+$$
 
 subject to:
 
-\[
-\boxed{
+$$
 E_{\text{approx}}(c)\leq E_{\max}
-}
-\]
+$$
 
-where \(C\) is the set of tested AQFT configurations.
+where $C$ is the set of tested AQFT configurations.
 
 ---
 
@@ -434,8 +411,7 @@ where \(C\) is the set of tested AQFT configurations.
 
 To compare the threshold-based and degree-based approaches, the physical two-qubit gate reduction is calculated as:
 
-\[
-\boxed{
+$$
 \text{Reduction}(\%) =
 \frac{
 N_{2Q}^{\text{threshold}}
@@ -445,8 +421,7 @@ N_{2Q}^{\text{degree}}
 N_{2Q}^{\text{threshold}}
 }
 \times100
-}
-\]
+$$
 
 A positive value means that the degree-based selection achieves a lower physical two-qubit cost than the threshold-based selection under the same error budget.
 
@@ -493,9 +468,9 @@ However, their parameterizations do not always select the same approximation lev
 
 The degree-based search provides a more fine-grained selection of possible truncation levels.
 
-The main observations are:
+## Main observations
 
-### 1. Hardware cost decreases as approximation becomes more aggressive
+### 1. Hardware cost decreases with more aggressive approximation
 
 Removing controlled-phase rotations generally reduces the number of logical two-qubit gates.
 
@@ -517,29 +492,29 @@ The hardware topology can introduce additional routing operations.
 
 The degree-based approach produced a lower physical two-qubit count than the threshold-based approach in:
 
-\[
-\boxed{5/20}
-\]
+$$
+5/20
+$$
 
-tested error-budget/qubit combinations.
+tested qubit-size/error-budget combinations.
 
 The maximum observed physical two-qubit reduction was:
 
-\[
-\boxed{25.00\%}
-\]
+$$
+25.00\%
+$$
 
 at 4 qubits with:
 
-\[
+$$
 E_{\max}=0.20
-\]
+$$
 
 where the physical two-qubit count decreased from:
 
-\[
+$$
 12\rightarrow9
-\]
+$$
 
 ### 5. The improvement is not universal
 
@@ -557,15 +532,15 @@ A secondary experiment investigates whether the controlled-phase gates removed b
 
 The optimization uses the same constraint:
 
-\[
+$$
 E_{\text{approx}}\leq E_{\max}
-\]
+$$
 
 and the same hardware objective:
 
-\[
+$$
 \min N_{2Q}^{\text{physical}}
-\]
+$$
 
 This experiment tests whether the physical location of removed gates affects routing overhead.
 
@@ -573,9 +548,7 @@ The results show that selective pruning generally produces the same solution as 
 
 Some cases show additional hardware-level improvements.
 
-For example:
-
-### 6 qubits, \(E_{\max}=0.10\)
+## 6 qubits, $E_{\max}=0.10$
 
 Degree-based:
 
@@ -597,7 +570,7 @@ Error              = 0.053449
 
 The physical two-qubit count remains the same, but selective pruning reduces the number of SWAP gates.
 
-### 8 qubits, \(E_{\max}=0.10\)
+## 8 qubits, $E_{\max}=0.10$
 
 Degree-based:
 
@@ -617,15 +590,13 @@ Depth              = 75
 Error              = 0.050259
 ```
 
-This demonstrates that the **location of the removed controlled-phase gates can affect hardware routing cost**, even when the number of removed gates is similar.
+This demonstrates that the location of the removed controlled-phase gates can affect hardware routing cost, even when the number of removed gates is similar.
 
-Selective pruning is therefore treated as a secondary exploratory extension rather than the primary contribution.
+Selective pruning is therefore treated as a **secondary exploratory extension** rather than the primary contribution.
 
 ---
 
-# Experimental Summary
-
-The overall experimental workflow is:
+# Experimental Workflow
 
 ```text
 Exact QFT
@@ -642,9 +613,8 @@ AQFT                AQFT
     +---------+----------+
               |
               v
-      Calculate Unitery
-         Approximation
-            Error
+      Calculate Unitary
+      Approximation Error
               |
               v
        Apply Error Budget
@@ -752,15 +722,13 @@ The key observation is that minimizing logical QFT resources alone does not full
 
 By formulating AQFT selection as:
 
-\[
-\boxed{
+$$
 \min N_{2Q}^{\text{physical}}
 \quad
 \text{subject to}
 \quad
 E_{\text{approx}}\leq E_{\max}
-}
-\]
+$$
 
 the approximation level can be selected according to both:
 
@@ -779,16 +747,16 @@ Overall, the experiments demonstrate the importance of evaluating AQFT **after h
 
 ### QFT
 
-\[
+$$
 QFT|x\rangle =
 \frac{1}{\sqrt{N}}
 \sum_{y=0}^{N-1}
 e^{2\pi ixy/N}|y\rangle
-\]
+$$
 
 ### Unitary Fidelity
 
-\[
+$$
 F_U =
 \frac{
 \left|
@@ -800,39 +768,33 @@ U_{\text{exact}}^\dagger U_{\text{AQFT}}
 }{
 d^2
 }
-\]
+$$
 
 ### Approximation Error
 
-\[
+$$
 E_{\text{approx}}=1-F_U
-\]
+$$
 
 ### Hardware-Aware Optimization
 
-\[
-\boxed{
+$$
 \min N_{2Q}^{\text{physical}}
 \quad
 \text{subject to}
 \quad
 E_{\text{approx}}\leq E_{\max}
-}
-\]
+$$
 
 ### Experimental Error Budgets
 
-\[
-\boxed{
-E_{\max}\in
-\{0.01,\;0.05,\;0.10,\;0.20\}
-}
-\]
+$$
+E_{\max}\in\{0.01,\;0.05,\;0.10,\;0.20\}
+$$
 
 ### Physical 2Q Reduction
 
-\[
-\boxed{
+$$
 \text{Reduction}(\%) =
 \frac{
 N_{2Q}^{\text{threshold}}
@@ -842,5 +804,4 @@ N_{2Q}^{\text{degree}}
 N_{2Q}^{\text{threshold}}
 }
 \times100
-}
-\]
+$$
