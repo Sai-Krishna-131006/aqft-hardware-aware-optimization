@@ -754,13 +754,14 @@ $$
 The physical two-qubit gate reduction is calculated as:
 
 $$
-\mathrm{Reduction}(\%) =
+\mathrm{Reduction}
+=
 \frac{
 N_{2Q}^{threshold} - N_{2Q}^{degree}
 }{
 N_{2Q}^{threshold}
 }
-\times 100
+\times 100\%
 $$
 
 where:
