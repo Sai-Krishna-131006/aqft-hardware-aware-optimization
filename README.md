@@ -769,3 +769,35 @@ where:
 - `N_2Q_degree` = physical two-qubit gates selected using the degree-based method
 
 A positive reduction means that the degree-based method requires fewer physical two-qubit gates than the threshold-based method under the same approximation-error budget.
+
+### Interpretation of the Reduction
+
+The reduction values reported in this table are **internal experimental
+comparisons**, not improvements over previous published QFT/AQFT methods.
+
+For each qubit size and approximation-error budget, the degree-based
+configuration is compared against the best threshold-based configuration
+under the same error constraint.
+
+The reduction is calculated as:
+
+$$
+\mathrm{Reduction}
+=
+\frac{
+N_{2Q}^{threshold} - N_{2Q}^{degree}
+}{
+N_{2Q}^{threshold}
+}
+\times 100\%
+$$
+
+Therefore, a reduction of 25% means that the selected degree-based
+configuration required 25% fewer physical two-qubit gates than the selected
+threshold-based configuration under the same experimental conditions.
+
+Published optimizations use different baselines and resource metrics.
+For example, previous work has optimized AQFT using T-count, while
+hardware-oriented QFT work has optimized CNOT count for LNN architectures.
+These results are therefore discussed as related literature rather than
+directly combined with the percentage reductions reported in this experiment.
