@@ -166,7 +166,7 @@ $$
 F_U =
 \frac{
 \left|
-\operatorname{Tr}
+\mathrm{Tr}
 \left(
 U_{\text{exact}}^\dagger U_{\text{AQFT}}
 \right)
@@ -655,49 +655,6 @@ Hardware-Aware Selection
 
 ---
 
-# Repository Structure
-
-```text
-aqft-hardware-aware-optimization/
-│
-├── src/
-│   ├── qft_builder.py
-│   └── aqft_builder.py
-│
-├── experiments/
-│   ├── aqft_degrees.py
-│   ├── aqft_thresholds.py
-│   ├── analyze_degrees.py
-│   ├── analyze_thresholds.py
-│   ├── compare_aqft.py
-│   ├── transpilation_experiment.py
-│   ├── analyze_transpilation.py
-│   ├── analyze_hardware_tradeoff.py
-│   ├── hardware_aware_selection.py
-│   ├── fine_threshold_sweep.py
-│   ├── compare_truncation_methods.py
-│   └── unified_selective_experiment.py
-│
-├── results/
-│   ├── aqft_degree_results.csv
-│   ├── aqft_threshold_results.csv
-│   ├── transpilation_results.csv
-│   ├── hardware_tradeoff_results.csv
-│   └── hardware_aware_optimization.csv
-│
-├── plots/
-│   ├── degree/
-│   ├── threshold/
-│   ├── comparison/
-│   ├── transpilation/
-│   └── tradeoff/
-│
-├── README.md
-└── requirements.txt
-```
-
----
-
 # Reproducibility
 
 The experiments are implemented using Python and Qiskit.
@@ -760,7 +717,7 @@ $$
 F_U =
 \frac{
 \left|
-\operatorname{Tr}
+\mathrm{Tr}
 \left(
 U_{\text{exact}}^\dagger U_{\text{AQFT}}
 \right)
@@ -794,14 +751,21 @@ $$
 
 ### Physical 2Q Reduction
 
+The physical two-qubit gate reduction is calculated as:
+
 $$
-\text{Reduction}(\%) =
+\mathrm{Reduction}(\%) =
 \frac{
-N_{2Q}^{\text{threshold}}
--
-N_{2Q}^{\text{degree}}
+N_{2Q}^{threshold} - N_{2Q}^{degree}
 }{
-N_{2Q}^{\text{threshold}}
+N_{2Q}^{threshold}
 }
-\times100
+\times 100
 $$
+
+where:
+
+- $N_{2Q}^{threshold}$ = physical two-qubit gates selected using the threshold-based method
+- $N_{2Q}^{degree}$ = physical two-qubit gates selected using the degree-based method
+
+A positive reduction means that the degree-based method requires fewer physical two-qubit gates than the threshold-based method under the same approximation-error budget.
