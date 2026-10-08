@@ -45,6 +45,27 @@ with open(input_file, "r", newline="") as file:
 
 print(f"Loaded {len(rows)} rows")
 
+# --------------------------------------------------
+# Calculate hardware overhead
+# --------------------------------------------------
+
+for row in rows:
+
+    if row["logical_two_qubit"] > 0:
+        row["two_qubit_overhead"] = (
+            row["transpiled_two_qubit"]
+            / row["logical_two_qubit"]
+        )
+    else:
+        row["two_qubit_overhead"] = 1.0
+
+    if row["logical_depth"] > 0:
+        row["depth_overhead"] = (
+            row["transpiled_depth"]
+            / row["logical_depth"]
+        )
+    else:
+        row["depth_overhead"] = 1.0
 
 # --------------------------------------------------
 # Plot 1
@@ -208,6 +229,44 @@ plt.savefig(
 plt.close()
 
 # --------------------------------------------------
+# Plot 5
+# 2-Qubit Hardware Overhead vs Approximation Error
+# --------------------------------------------------
+
+plt.figure(figsize=(9, 6))
+
+for n in [3, 4, 5, 6, 8]:
+
+    data = [
+        row for row in rows
+        if row["qubits"] == n
+        and row["method"] == "degree"
+        and row["logical_two_qubit"] > 0
+    ]
+
+    plt.plot(
+        [row["error"] for row in data],
+        [row["two_qubit_overhead"] for row in data],
+        marker="o",
+        label=f"{n} qubits"
+    )
+
+plt.xlabel("Approximation Error")
+plt.ylabel("2-Qubit Hardware Overhead")
+plt.title("2-Qubit Hardware Overhead vs Approximation Error")
+
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+
+plt.savefig(
+    output_dir / "error_vs_2q_overhead.png",
+    dpi=300
+)
+
+plt.close()
+
+# --------------------------------------------------
 # Finished
 # --------------------------------------------------
 
@@ -217,3 +276,4 @@ print(output_dir / "error_vs_transpiled_2q.png")
 print(output_dir / "error_vs_swaps.png")
 print(output_dir / "logical_vs_transpiled_2q.png")
 print(output_dir / "logical_vs_transpiled_depth.png")
+print(output_dir / "error_vs_2q_overhead.png")
