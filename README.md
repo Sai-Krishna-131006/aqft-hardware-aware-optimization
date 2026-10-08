@@ -765,7 +765,7 @@ $$
 
 where:
 
-- $N_{2Q}^{threshold}$ = physical two-qubit gates selected using the threshold-based method
-- $N_{2Q}^{degree}$ = physical two-qubit gates selected using the degree-based method
+- `N_2Q_threshold` = physical two-qubit gates selected using the threshold-based method
+- `N_2Q_degree` = physical two-qubit gates selected using the degree-based method
 
 A positive reduction means that the degree-based method requires fewer physical two-qubit gates than the threshold-based method under the same approximation-error budget.
